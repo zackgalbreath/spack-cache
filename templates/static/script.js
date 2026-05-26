@@ -676,8 +676,17 @@ $(document).ready(async function () {
         applyRoute(window.location.search);
     });
     fetchGzippedJson(`${basePath}/api/specs_data.json.gz`).then((data) => {
-        specData = data
-        applyRoute(window.location.search);
+        specData = data;
+        if (packageName && packageData?.[packageName]) {
+            const urlParams = new URLSearchParams(window.location.search);
+            currentSpecs = packageData[packageName].specs.map((hash) => specData[hash]);
+            updateBadgeOptions();
+            badgeFilters = Object.fromEntries(
+                Object.keys(badgeFilters).map((key) => [key, urlParams.getAll(key)])
+            );
+            badgeFiltersUpdated();
+            updateTable();
+        }
     });
 
     window.navigation.addEventListener("navigate", (e) => {
