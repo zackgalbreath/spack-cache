@@ -667,14 +667,14 @@ $(document).ready(async function () {
     basePath = document.getElementById('base-path').innerHTML;
 
     fetchGzippedJson(`${basePath}/api/tree_data.json.gz`).then((data) => {
-        treeData = data
+        treeData = data;
         loadTree('Stack -> Tag');
         filterTree();
-    });
+    }).catch((err) => console.error('Failed to load tree data:', err));
     fetchGzippedJson(`${basePath}/api/package_data.json.gz`).then((data) => {
-        packageData = data
+        packageData = data;
         applyRoute(window.location.search);
-    });
+    }).catch((err) => console.error('Failed to load package data:', err));
     fetchGzippedJson(`${basePath}/api/specs_data.json.gz`).then((data) => {
         specData = data;
         if (packageName && packageData?.[packageName]) {
@@ -687,7 +687,7 @@ $(document).ready(async function () {
             badgeFiltersUpdated();
             updateTable();
         }
-    });
+    }).catch((err) => console.error('Failed to load spec data:', err));
 
     window.navigation.addEventListener("navigate", (e) => {
         const dest = e.destination.url;
